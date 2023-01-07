@@ -453,7 +453,38 @@
           </div>
 
           <div class="col-lg-6">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe_94pul4M-KHuq2VwVRYVglNPQlTABd-etYZ-egPUe7ehE3g/viewform?embedded=true" width="400" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            <!-- <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe_94pul4M-KHuq2VwVRYVglNPQlTABd-etYZ-egPUe7ehE3g/viewform?embedded=true" width="400" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe> -->
+            <form action="https://sheetdb.io/api/v1/0clql2qg347u1" method="post" id="sheetdb-form" class="php-email-form">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="data[name]" class="form-control" placeholder="Your Name" required>
+                </div>
+
+                <div class="col-md-6 ">
+                  <input type="email" class="form-control" name="data[email]" placeholder="Your Email" required>
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="data[mobile]" placeholder="Mobile Number" required>
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="data[subject]" placeholder="Subject" required>
+                </div>
+
+                <div class="col-md-12">
+                  <textarea class="form-control" name="data[message]" rows="6" placeholder="Message" required></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading" id="form-load">Loading</div>
+                  <div class="sent-message" id="form-done">Thank You for the query, We will contact you shortly</div>
+                  <button type="submit" id="form-submit">Submit</button>
+                </div>
+
+              </div>
+            </form>
           </div>
 
         </div>
@@ -538,6 +569,33 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    let form = document.getElementById('sheetdb-form');
+    let form_load = document.getElementById('form-load');
+    let form_done = document.getElementById('form-done');
+    let form_submit = document.getElementById('form-submit');
+    form_load.style.display = "none";
+    form_done.style.display = "none";
+    form_submit.style.display = "block";
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      form_load.style.display = "block";
+      form_done.style.display = "none";
+      form_submit.style.display = "none";
+      let form_data = new FormData(document.getElementById("sheetdb-form"));
+      form_data.append("data[timestamp]", new Date());
+      fetch(form.action, {
+        method: "POST",
+        body: form_data
+      }).then(
+        response => response.json()
+      ).then((html) => {
+        form_load.remove();
+        form_submit.remove();
+        form_done.style.display = "block";
+      });
+    });
+  </script>
 
 </body>
 
